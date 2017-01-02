@@ -17,5 +17,7 @@ To setup qloapps dockerize version on your server or system, follow these instru
 
 7. Follow the installtion steps.
 
+8. In Mysql Details host will be your HOST System or Server IP for ex-: "192.168.1.152:3306" and database is "qloapps"
+
 Note -: If you are running any other services on your host at port 80 and 3306 then you have to mention other ports in step 3.
 
