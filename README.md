@@ -11,7 +11,7 @@ To setup qloapps dockerize version on your server or system, follow these instru
 
 4. Your last command will provide you a unique hash_value or container_ID which is linked with your running container.
 
-5. Now you need to know your mysql credentials for that run "docker logs container_ID".
+5. Now you need to know your mysql credentials for that run "docker logs container_ID", you can also find out your docker container_ID by running command "docker ps"
 
 6. After getting your Mysql credentials open your qloapps on your Host system browser "http://your_host_system_ip".
 
