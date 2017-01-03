@@ -1,6 +1,15 @@
 # qloapps_docker
 Dockerize version of Qloapps, an open source Hotel Commerce Solution
 Qlo booking system allow hotel owners to manage their online & ondesk bookings by launching an Hotel Booking Website. Owner can synchronize their rooms, rates and availabilty on single platform. It is a simple, elegant and astonishing booking system that help end users to book multiple rooms from multiple hotels in single cart.
+
+In our architecture, we are using:
+
+> Apache-2.4.7
+
+> PHP-5.5
+
+> Mysql-5.6
+
 To setup qloapps dockerize version on your server or system, follow these instructions-:
 
 1. Install Docker and its dependencies according to your OS version for more details check -: https://docs.docker.com/engine/installation/linux/ubuntulinux/.
@@ -21,3 +30,6 @@ To setup qloapps dockerize version on your server or system, follow these instru
 
 Note -: If you are running any other services on your host at port 80 and 3306 then you have to mention other ports in step 3.
 
+After successful installation:
+
+![Alt text](https://github.com/alankrit29/Shell-Provisining-in-Vagrant-for-Qloapps/blob/master/Screenshot%20from%202017-01-03%2011:47:53.png?raw=true)
