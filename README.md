@@ -16,7 +16,7 @@ To setup qloapps dockerize version on your server or system, follow these instru
 
 2. Pull qloapps docker image from docker hub by executing command "docker pull webkul/qloapps:latest".
 
-3. After pulling the image, run your qloapps container by specifying ports "docker run -d -p 80:80 -p 3306:3306 webkul/qloapps:latest". For example in this command your Host port 80 is linked with the docker port 80 running apache and Host port 3306 is linked with the docker port 3306 running MySQL, you can change the ports of your Host as per your requirements.
+3. After pulling the image, run your qloapps container by specifying ports "docker run -d -p 80:80 -p 3306:3306 webkul/qloapps_docker:latest". For example in this command your Host port 80 is linked with the docker port 80 running apache and Host port 3306 is linked with the docker port 3306 running MySQL, you can change the ports of your Host as per your requirements.
 
 4. Your last command will provide you a unique hash_value or container_ID which is linked with your running container.
 
