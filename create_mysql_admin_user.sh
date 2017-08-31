@@ -20,6 +20,10 @@ mysql -uroot -e "CREATE DATABASE qloapps"
 
 echo "=> Done!"
 
+echo "Your mysql root password is $PASS" >> /var/log/check.log
+
+echo "Delete /var/log/check.log after checking password"
+
 echo "========================================================================"
 echo "You can now connect to this MySQL Server using:"
 echo ""
