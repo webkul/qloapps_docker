@@ -26,10 +26,21 @@ To setup qloapps dockerize version on your server or system, follow these instru
 
 7. Follow the installtion steps.
 
-8. In Mysql Details host will be your HOST System or Server IP for ex-: "192.168.1.152:3306" and database is "qloapps"
+8. In Mysql Details host will be your HOST System or Server IP for ex-: "X.X.X.X:3306" and database is "qloapps", database user is "qloappsuser" and password will be randomly generated and will be saved in /var/log/check.log.
+
+9. To get your database user password, run command: "docker exec -i your_container_id cat /var/log/check.log"
+
+10. There is no root password yet for mysql-server. You can set it by yourself. Also, if you wish to make changes in database credentials then download this repository and make changes in mysql.sh.
+
+11. To check your backoffice URL, go to server root directory and check the admin directory name string. You would be needed to rename the admin directory. Then go to updated backoffice URL.
+
+12. After qloapps installation, remove "install" directory from server root directory inside the container. Run command:
+
+> docker exec -ti your_container_id bash
+
+> cd /var/www/html//hotelcommerce-1.1.0/
+
+> rm -r install
+
 
 Note -: If you are running any other services on your host at port 80 and 3306 then you have to mention other ports in step 3.
-
-After successful installation:
-
-![Alt text](https://github.com/alankrit29/Shell-Provisining-in-Vagrant-for-Qloapps/blob/master/Screenshot%20from%202017-01-03%2011:47:53.png?raw=true)
