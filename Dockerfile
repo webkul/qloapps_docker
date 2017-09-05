@@ -1,92 +1,67 @@
+### DO NOT SKIP OR REMOVE ANY STEP UNLESS YOU HAVE PROPER REASONS TO DO SO ### 
+
 From ubuntu:14.04
 
-MAINTAINER Nitin Agnihotri <nitin124@webkul.com>
+MAINTAINER Alankrit Srivastava alankrit.srivastava256@webkul.com
 
-##update server and install apache
+## UPDATE SERVER AND INSTALL LAMP SERVER
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update
+RUN apt-get update \
 
-RUN apt-get -y install apache2 makepasswd
+&& apt-get -y install apache2 \
+&& apt-get install -y php5 php5-curl php5-gd php5-mcrypt php5-mysql libapache2-mod-php5 \
+&& sed -i -e"s/^memory_limit\s*=\s*128M/memory_limit = 512M/" /etc/php5/apache2/php.ini \
+&& php5enmod mcrypt \
 
+&& echo '<Directory /var/www/html/> \n\
+            Options Indexes FollowSymLinks MultiViews \n\
+            AllowOverride All \n\
+            Require all granted \n\
+            </Directory> ' >> /etc/apache2/apache2.conf \
 
-RUN mkdir -p /var/lock/apache2 /var/run/apache2
+&& echo ' <VirtualHost *:80> \n\
+#ServerName  \n\
+DocumentRoot /var/www/html/hotelcommerce-1.1.0 \n\
+<Directory  /var/www/html/hotelcommerce-1.1.0> \n\
+Options FollowSymLinks \n\
+Require all granted  \n\
+AllowOverride all \n\
+</Directory> \n\
+ErrorLog /var/log/apache2/error.log \n\
+CustomLog /var/log/apache2/access.log combined \n\
+</VirtualHost> ' > /etc/apache2/sites-enabled/000-default.conf \
 
-## install php and its dependencies
+&& rm /var/www/html/* \
 
-RUN apt-get -y install php5 libapache2-mod-php5 php5-mcrypt php5-mysql php5-gd php5-curl php5-mcrypt
+&& DEBIAN_FRONTEND=noninteractive apt-get -y install unzip wget\
 
-RUN a2enmod php5
+&& DEBIAN_FRONTEND=noninteractive  apt-get install -y mysql-server-5.6 \
 
-RUN DEBIAN_FRONTEND=noninteractive php5enmod mcrypt
+&& sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
 
-##install mysql-server
+&& apt-get install -y supervisor \
+  
+&& mkdir -p /var/log/supervisor \
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server 
+&& cd /opt && wget https://github.com/webkul/hotelcommerce/archive/v1.1.0.zip \
 
-ADD my.cnf /etc/mysql/conf.d/my.cnf
+&& cd /var/www/html && unzip /opt/v1.1.0.zip \
 
-##install supervisor and setup supervisord.conf file
+&& find /var/www/html/ -type f -exec chmod 644 {} \; \
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y supervisor
- 
-RUN mkdir -p /var/log/supervisor
- 
+&& find /var/www/html/ -type d -exec chmod 755 {} \; \
+
+&& chown -R www-data: /var/www/html/ 
+
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
- 
-##Copy your apache configuration file
 
-RUN rm /etc/apache2/sites-available/000-default.conf
+COPY mysql.sh /etc/mysql.sh
 
-COPY 000-default.conf /etc/apache2/sites-available/
+RUN chmod a+x /etc/mysql.sh
 
-##Install Git
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install git
+EXPOSE 3306 80 443
 
-## clone qloapps from github
-
-RUN rm -f /var/www/html/*
-
-RUN cd /var/www/html && git clone https://github.com/webkul/hotelcommerce.git .
-
-## manage php memory and date-timezone setttings
-
-##change ownership and permissions
-
-RUN chown -R www-data:www-data /var/www/html
-
-RUN find /var/www/html/ -type f -exec chmod 644 {} \;
-
-RUN find /var/www/html/ -type d -exec chmod 755 {} \;
-
-RUN DEBIAN_FRONTEND=noninteractive a2enmod rewrite
-
-RUN DEBIAN_FRONTEND=noninteractive php5enmod mcrypt
-
-RUN DEBIAN_FRONTEND=noninteractive a2enmod headers
-
-ADD startupscript.sh /var/www/startupscript.sh
-
-ADD start-apache2.sh /var/www/start-apache2.sh
-
-ADD start-mysqld.sh /var/www/start-mysqld.sh
-
-ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-ADD create_mysql_admin_user.sh /var/www/create_mysql_admin_user.sh
-
-RUN apt-get install pwgen
-
-RUN chmod 755 /var/www/*.sh
-
-RUN rm -rf /var/lib/mysql/*
-
-EXPOSE 80
-
-EXPOSE 3306
-
-## This command will run inside the container when container gets launched
-
-CMD ["/var/www/startupscript.sh"]
+CMD ["/usr/bin/supervisord"] 
 
 
