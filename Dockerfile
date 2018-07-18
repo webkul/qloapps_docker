@@ -32,7 +32,7 @@ RUN apt-get update \
     && find /home/${user}/www -type d -exec chmod 755 {} \; \
     && chown -R ${user}: /home/${user}/www \
     && sed -i "s@www-data@${user}@g" /etc/apache2/envvars \
-    &&     && echo ' <Directory /home/> \n\
+    && echo ' <Directory /home/> \n\
                 Options FollowSymLinks \n\  
                 Require all granted  \n\
                 AllowOverride all \n\
