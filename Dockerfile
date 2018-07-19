@@ -4,7 +4,7 @@ LABEL maintainer="Alankrit Srivastava <alankrit.srivastava256@webkul.com>"
 
 ARG user=qloapps
 
-##Update and install lamp server
+##Update server and install lamp server
 RUN apt-get update \
     && apt-get -y install apache2 \
     && a2enmod rewrite \
