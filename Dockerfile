@@ -21,7 +21,7 @@ RUN apt-get update \
     && sed -i -e"s/^upload_max_filesize\s*=\s*2M/upload_max_filesize = 16M/" /etc/php/5.6/apache2/php.ini \
     && sed -i -e"s/^max_execution_time\s*=\s*30/max_execution_time = 500/" /etc/php/5.6/apache2/php.ini \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install mysql-server-5.6 \
-    && apt-get install -y git nano \
+    && apt-get install -y git nano curl openssh-server \
 ##setup non root user
     && useradd -m -s /bin/bash ${user} \
     && mkdir -p /home/${user}/www \
