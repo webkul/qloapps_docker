@@ -39,7 +39,7 @@ To begin with:
 
 2. After pulling the image, run your qloapps container by specifying ports and arguments as: 
 
-> docker run -tidp 80:80 -p 3306:3306 -p 2222:22 -name qloappsv111 -e USER_PASSWORD=qloappsuserpassword -e MYSQL_ROOT_PASSWORD=myrootpassword -e MYSQL_DATABASE=mydatabase qloapps:latest
+> docker run -tidp 80:80 -p 3306:3306 -p 2222:22 -name qloappsv111 -e USER_PASSWORD=qloappsuserpassword -e MYSQL_ROOT_PASSWORD=myrootpassword -e MYSQL_DATABASE=mydatabase webkul/qloapps_docker:latest
 
 3. In the above command, your Host port 80 is linked with the docker port 80 running apache and Host port 3306 is linked with the docker port 3306 running MySQL, you can change the ports of your Host as per your requirements. Also, your SSH port 2222 is mapped with docker port 22 running SSH server. Please ensure that no other services are running on these host ports.
 
