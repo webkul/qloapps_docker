@@ -1,67 +1,52 @@
-### DO NOT SKIP OR REMOVE ANY STEP UNLESS YOU HAVE PROPER REASONS TO DO SO ### 
+FROM ubuntu:14.04
+ 
+LABEL maintainer="Alankrit Srivastava <alankrit.srivastava256@webkul.com>"
 
-From ubuntu:14.04
+ARG user=qloapps
 
-MAINTAINER Alankrit Srivastava alankrit.srivastava256@webkul.com
-
-## UPDATE SERVER AND INSTALL LAMP SERVER
-
+##Update and install lamp server
 RUN apt-get update \
-
-&& apt-get -y install apache2 \
-&& apt-get install -y php5 php5-curl php5-gd php5-mcrypt php5-mysql libapache2-mod-php5 \
-&& sed -i -e"s/^memory_limit\s*=\s*128M/memory_limit = 512M/" /etc/php5/apache2/php.ini \
-&& php5enmod mcrypt \
-
-&& echo '<Directory /var/www/html/> \n\
-            Options Indexes FollowSymLinks MultiViews \n\
-            AllowOverride All \n\
-            Require all granted \n\
-            </Directory> ' >> /etc/apache2/apache2.conf \
-
-&& echo ' <VirtualHost *:80> \n\
-#ServerName  \n\
-DocumentRoot /var/www/html/hotelcommerce-1.1.0 \n\
-<Directory  /var/www/html/hotelcommerce-1.1.0> \n\
-Options FollowSymLinks \n\
-Require all granted  \n\
-AllowOverride all \n\
-</Directory> \n\
-ErrorLog /var/log/apache2/error.log \n\
-CustomLog /var/log/apache2/access.log combined \n\
-</VirtualHost> ' > /etc/apache2/sites-enabled/000-default.conf \
-
-&& rm /var/www/html/* \
-
-&& DEBIAN_FRONTEND=noninteractive apt-get -y install unzip wget\
-
-&& DEBIAN_FRONTEND=noninteractive  apt-get install -y mysql-server-5.6 \
-
-&& sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf \
-
-&& apt-get install -y supervisor \
-  
-&& mkdir -p /var/log/supervisor \
-
-&& cd /opt && wget https://github.com/webkul/hotelcommerce/archive/v1.1.0.zip \
-
-&& cd /var/www/html && unzip /opt/v1.1.0.zip \
-
-&& find /var/www/html/ -type f -exec chmod 644 {} \; \
-
-&& find /var/www/html/ -type d -exec chmod 755 {} \; \
-
-&& chown -R www-data: /var/www/html/ 
+    && apt-get -y install apache2 \
+    && a2enmod rewrite \
+    && a2enmod headers \
+    && export LANG=en_US.UTF-8 \
+    && apt-get update \
+    && apt-get install -y software-properties-common \
+    && apt-get install -y language-pack-en-base \
+    && LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php \
+    && apt-get update \
+    && apt-get -y install php5.6 php5.6-curl php5.6-intl php5.6-gd php5.6-dom php5.6-mcrypt php5.6-iconv php5.6-xsl php5.6-mbstring php5.6-ctype   php5.6-zip php5.6-pdo php5.6-xml php5.6-bz2 php5.6-calendar php5.6-exif php5.6-fileinfo php5.6-json php5.6-mysqli php5.6-mysql php5.6-posix php5.6-tokenizer php5.6-xmlwriter php5.6-xmlreader php5.6-phar php5.6-soap php5.6-mysql php5.6-fpm php5.6-bcmath libapache2-mod-php5.6 \
+    && sed -i -e"s/^memory_limit\s*=\s*128M/memory_limit = 512M/" /etc/php/5.6/apache2/php.ini \
+    && echo "date.timezone = Asia/Kolkata" >> /etc/php/5.6/apache2/php.ini \
+    && sed -i -e"s/^upload_max_filesize\s*=\s*2M/upload_max_filesize = 16M/" /etc/php/5.6/apache2/php.ini \
+    && sed -i -e"s/^max_execution_time\s*=\s*30/max_execution_time = 500/" /etc/php/5.6/apache2/php.ini \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install mysql-server-5.6 \
+    && apt-get install -y git nano curl openssh-server \
+##setup non root user
+    && useradd -m -s /bin/bash ${user} \
+    && mkdir -p /home/${user}/www \
+##Download Qloapps latest version
+    && cd /home/${user}/www && git clone https://github.com/webkul/hotelcommerce.git \
+##change file permission and ownership
+    && find /home/${user}/www -type f -exec chmod 644 {} \; \
+    && find /home/${user}/www -type d -exec chmod 755 {} \; \
+    && chown -R ${user}: /home/${user}/www \
+    && sed -i "s@www-data@${user}@g" /etc/apache2/envvars \
+    && echo ' <Directory /home/> \n\
+                Options FollowSymLinks \n\  
+                Require all granted  \n\
+                AllowOverride all \n\
+                </Directory>  ' >> /etc/apache2/apache2.conf \
+    && sed -i "s@/var/www/html@/home/${user}/www/hotelcommerce@g" /etc/apache2/sites-enabled/000-default.conf \
+##install supervisor and setup supervisord.conf file
+    && apt-get install -y supervisor \
+    && mkdir -p /var/log/supervisor
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-COPY mysql.sh /etc/mysql.sh
-
-RUN chmod a+x /etc/mysql.sh
-
+COPY update.sh /etc/update.sh
+RUN chmod a+x /etc/update.sh 
+WORKDIR /home/${user}/www/hotelcommerce
 
 EXPOSE 3306 80 443
 
 CMD ["/usr/bin/supervisord"] 
-
-
