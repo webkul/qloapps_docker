@@ -12,7 +12,7 @@ Docker is an open-source project that can be integrated with almost all the appl
 
 > Check if your user has access privileges to run docker commands.
 
-### NOTE TO THE USER
+#### NOTE TO THE USER
 
 > Mysql root password, Mysql Database name and SSH user password is not set. Users have to pass *Mysql root password, database name, and SSH user password* as arguments while running the docker image.
 
@@ -52,7 +52,7 @@ USER_PASSWORD respectively.
 
 7. After qloapps installation, remove "install" directory from server root directory inside the container. Run command:
 
-> docker exec -i qloappsv111 rm -rf rm -rf /home/qloapps/www/hotelcommerce/install .
+> docker exec -i qloappsv111 rm -rf /home/qloapps/www/hotelcommerce/install .
 
 8. On clicking on backoffice URL, you will be promped to rename your backoffice URL. Go to running docker container and change the name of admin directory as mentioned.
 
