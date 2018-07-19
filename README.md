@@ -1,46 +1,70 @@
-# qloapps_docker
-Dockerize version of Qloapps, an open source Hotel Commerce Solution
-Qlo booking system allow hotel owners to manage their online & ondesk bookings by launching an Hotel Booking Website. Owner can synchronize their rooms, rates and availabilty on single platform. It is a simple, elegant and astonishing booking system that help end users to book multiple rooms from multiple hotels in single cart.
+## WHAT IS QLOAPPS
 
-In our architecture, we are using:
+Qloapps is an open source, free and customizable online reservation system. You can launch a userfriendly site and can manage online as well as offline bookings. Using this you can easily launch your hotel booking website and even manage your offline booking too. This package is developed on top of Prestashop 1.6.
 
-> Apache-2.4.7
+## DOCKERIZING QLOAPPS
 
-> PHP-5.5
+Docker is an open-source project that can be integrated with almost all the applications allowing scope of isolation and flexibility. It can be integrated with  Qloapps.
 
-> Mysql-5.6
+## PREREQUISITES
 
-To setup qloapps dockerize version on your server or system, follow these instructions-:
+> Install lastest avaiable Docker version and its dependencies according to your OS version. Refer to link https://docs.docker.com/install/linux/docker-ce/ubuntu/#prerequisites. 
 
-1. Install Docker and its dependencies according to your OS version for more details check -: https://docs.docker.com/engine/installation/linux/ubuntulinux/.
+> Check if your user has access privileges to run docker commands.
 
-2. Pull qloapps docker image from docker hub by executing command "docker pull webkul/qloapps:latest".
+### NOTE TO THE USER
 
-3. After pulling the image, run your qloapps container by specifying ports "docker run -d -p 80:80 -p 3306:3306 webkul/qloapps_docker:latest". For example in this command your Host port 80 is linked with the docker port 80 running apache and Host port 3306 is linked with the docker port 3306 running MySQL, you can change the ports of your Host as per your requirements.
+> Mysql root password, Mysql Database name and SSH user password is not set. Users have to pass *Mysql root password, database name, and SSH user password* as arguments while running the docker image.
 
-4. Your last command will provide you a unique hash_value or container_ID which is linked with your running container.
+> Default SSH user is created as "qloapps" while building this image. You can change user argument in Dockerfile and rebuild the docker image for your own use.
 
-5. Now you need to know your mysql credentials for that run "docker logs container_ID", you can also find out your docker container_ID by running command "docker ps"
-
-6. After getting your Mysql credentials open your qloapps on your Host system browser "http://your_host_system_ip".
-
-7. Follow the installtion steps.
-
-8. In Mysql Details host will be your HOST System or Server IP for ex-: "X.X.X.X:3306" and database is "qloapps", database user is "qloappsuser" and password will be randomly generated and will be saved in /var/log/check.log.
-
-9. To get your database user password, run command: "docker exec -i your_container_id cat /var/log/check.log"
-
-10. There is no root password yet for mysql-server. You can set it by yourself. Also, if you wish to make changes in database credentials then download this repository and make changes in mysql.sh.
-
-11. To check your backoffice URL, go to server root directory and check the admin directory name string. You would be needed to rename the admin directory. Then go to updated backoffice URL.
-
-12. After qloapps installation, remove "install" directory from server root directory inside the container. Run command:
-
-> docker exec -ti your_container_id bash
-
-> cd /var/www/html//hotelcommerce-1.1.0/
-
-> rm -r install
+> 
 
 
-Note -: If you are running any other services on your host at port 80 and 3306 then you have to mention other ports in step 3.
+## DOCKERIZING QLOAPPS
+
+In the dockerized Qloapps architecture, we are using:
+
+> Ubuntu 14.04
+
+> Mysql Server 5.6
+
+> PHP 5.6
+
+> SSH Server
+
+To begin with:
+
+1. Pull qloapps docker image from docker hub by running command "docker pull webkul/qloapps:latest".
+
+2. After pulling the image, run your qloapps container by specifying ports and arguments as: 
+
+> docker run -tidp 80:80 -p 3306:3306 -p 2222:22 -name qloappsv111 -e USER_PASSWORD=qloappsuserpassword -e MYSQL_ROOT_PASSWORD=myrootpassword -e MYSQL_DATABASE=mydatabase qloapps:latest
+
+3. In the above command, your Host port 80 is linked with the docker port 80 running apache and Host port 3306 is linked with the docker port 3306 running MySQL, you can change the ports of your Host as per your requirements. Also, your SSH port 2222 is mapped with docker port 22 running SSH server. Please ensure that no other services are running on these host ports.
+
+4. Mention your mysql root password, database name, 'qloapps' user password in arguments MYSQL_ROOT_PASSWORD, MYSQL_DATABASE and 
+USER_PASSWORD respectively.
+
+5. Check your running container using command *docker ps*. It will display you a container running with name qloappsv111.
+
+6. Now go to your browser and hit your IP or domain name and start qloapps installation process
+
+7. After qloapps installation, remove "install" directory from server root directory inside the container. Run command:
+
+> docker exec -i qloappsv111 rm -rf rm -rf /home/qloapps/www/hotelcommerce/install .
+
+8. On clicking on backoffice URL, you will be promped to rename your backoffice URL. Go to running docker container and change the name of admin directory as mentioned.
+
+9. To access your qloapps files and directories, you can SSH in your docker container as:
+
+> ssh qloapps@mention_your_ip -p 2222
+
+Note -: If you are running any other services on your host at port 80, 22 and 3306 then you have to mention other ports in step 2.
+
+## GETTING SUPPORT
+
+If you have any issues, contact us at support@webkul.com or raise ticket at https://webkul.uvdesk.com/
+
+
+Thank you.
