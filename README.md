@@ -64,7 +64,7 @@ Note -: If you are running any other services on your host at port 80, 22 and 33
 
 ## GETTING SUPPORT
 
-If you have any issues, contact us at support@webkul.com or raise ticket at https://webkul.uvdesk.com/
+If you have any issues, contact us at support@qloapps.com or raise ticket at https://webkul.uvdesk.com/
 
 
 Thank you.
