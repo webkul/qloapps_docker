@@ -1,5 +1,5 @@
 FROM ubuntu:18.04
-LABEL maintainer="Webkul Support <support@webkul.com>"
+LABEL maintainer="Qloapps Support <support@qloapps.com>"
 ARG user=qloapps
 ##Php file configuration with php version
 ENV php_version=php7.2 file_uploads=On allow_url_fopen=On memory_limit=512M max_execution_time=240 upload_max_filesize=200M post_max_size=400M max_input_vars=1500
