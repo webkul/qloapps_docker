@@ -25,11 +25,11 @@ Docker is an open-source project that can be integrated with almost all the appl
 
 In the dockerized Qloapps architecture, we are using:
 
-> Ubuntu 14.04
+> Ubuntu 18.04
 
-> Mysql Server 5.6
+> Mysql Server 5.7
 
-> PHP 5.6
+> PHP 7.2
 
 > SSH Server
 
@@ -39,20 +39,20 @@ To begin with:
 
 2. After pulling the image, run your qloapps container by specifying ports and arguments as: 
 
-> docker run -tidp 80:80 -p 3306:3306 -p 2222:22 -name qloappsv111 -e USER_PASSWORD=qloappsuserpassword -e MYSQL_ROOT_PASSWORD=myrootpassword -e MYSQL_DATABASE=mydatabase webkul/qloapps_docker:latest
+> docker run -tidp 80:80 -p 3306:3306 -p 2222:22 --name qloappsv141 -e USER_PASSWORD=qloappsuserpassword -e MYSQL_ROOT_PASSWORD=myrootpassword -e MYSQL_DATABASE=mydatabase webkul/qloapps_docker:latest
 
 3. In the above command, your Host port 80 is linked with the docker port 80 running apache and Host port 3306 is linked with the docker port 3306 running MySQL, you can change the ports of your Host as per your requirements. Also, your SSH port 2222 is mapped with docker port 22 running SSH server. Please ensure that no other services are running on these host ports.
 
 4. Mention your mysql root password, database name, 'qloapps' user password in arguments MYSQL_ROOT_PASSWORD, MYSQL_DATABASE and 
 USER_PASSWORD respectively.
 
-5. Check your running container using command *docker ps*. It will display you a container running with name qloappsv111.
+5. Check your running container using command *docker ps*. It will display you a container running with name qloappsv141.
 
 6. Now go to your browser and hit your IP or domain name and start qloapps installation process
 
 7. After qloapps installation, remove "install" directory from server root directory inside the container. Run command:
 
-> docker exec -i qloappsv111 rm -rf /home/qloapps/www/hotelcommerce/install .
+> docker exec -i qloappsv141 rm -rf /home/qloapps/www/hotelcommerce/install .
 
 8. On clicking on backoffice URL, you will be promped to rename your backoffice URL. Go to running docker container and change the name of admin directory as mentioned.
 
