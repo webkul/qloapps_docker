@@ -1,27 +1,24 @@
-FROM ubuntu:14.04
- 
-LABEL maintainer="Alankrit Srivastava <alankrit.srivastava256@webkul.com>"
-
+FROM ubuntu:18.04
+LABEL maintainer="Qloapps Support <support@qloapps.com>"
 ARG user=qloapps
-
+##Php file configuration with php version and mysql version
+ENV mysql_version=5.7 php_version=7.2 file_uploads=On allow_url_fopen=On memory_limit=512M max_execution_time=240 upload_max_filesize=200M post_max_size=400M max_input_vars=1500
 ##Update server and install lamp server
 RUN apt-get update \
+    && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install apache2 \
     && a2enmod rewrite \
     && a2enmod headers \
     && export LANG=en_US.UTF-8 \
-    && apt-get update \
     && apt-get install -y software-properties-common \
     && apt-get install -y language-pack-en-base \
     && LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php \
     && apt-get update \
-    && apt-get -y install php5.6 php5.6-curl php5.6-intl php5.6-gd php5.6-dom php5.6-mcrypt php5.6-iconv php5.6-xsl php5.6-mbstring php5.6-ctype   php5.6-zip php5.6-pdo php5.6-xml php5.6-bz2 php5.6-calendar php5.6-exif php5.6-fileinfo php5.6-json php5.6-mysqli php5.6-mysql php5.6-posix php5.6-tokenizer php5.6-xmlwriter php5.6-xmlreader php5.6-phar php5.6-soap php5.6-mysql php5.6-fpm php5.6-bcmath libapache2-mod-php5.6 \
-    && sed -i -e"s/^memory_limit\s*=\s*128M/memory_limit = 512M/" /etc/php/5.6/apache2/php.ini \
-    && echo "date.timezone = Asia/Kolkata" >> /etc/php/5.6/apache2/php.ini \
-    && sed -i -e"s/^upload_max_filesize\s*=\s*2M/upload_max_filesize = 16M/" /etc/php/5.6/apache2/php.ini \
-    && sed -i -e"s/^max_execution_time\s*=\s*30/max_execution_time = 500/" /etc/php/5.6/apache2/php.ini \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install mysql-server-5.6 \
-    && apt-get install -y git nano curl openssh-server \
+    && apt-get install -y php$php_version libapache2-mod-php$php_version php$php_version-bcmath php$php_version-cli php$php_version-json php$php_version-curl php$php_version-fpm php$php_version-gd php$php_version-ldap php$php_version-mbstring php$php_version-mysql php$php_version-soap php$php_version-sqlite3 php$php_version-xml php$php_version-zip php$php_version-intl php-imagick \
+    && echo "date.timezone = Asia/Kolkata" >> /etc/php/$php_version/apache2/php.ini \
+    && sed -i -e 's/memory_limit = .*/memory_limit = '${memory_limit}'/' -e 's/file_uploads = .*/file_uploads = '${file_uploads}'/' -e 's/allow_url_fopen = .*/allow_url_fopen = '${allow_url_fopen}'/' -e 's/max_execution_time = .*/max_execution_time = '${max_execution_time}'/' -e 's/upload_max_filesize = .*/upload_max_filesize = '${upload_max_filesize}'/' -e 's/post_max_size = .*/post_max_size = '${post_max_size}'/' -e 's/max_input_vars = .*/max_input_vars = '${max_input_vars}'/' /etc/php/$php_version/apache2/php.ini \
+    && apt-get -y install mysql-server-$mysql_version \
+    && apt-get install -y git nano vim curl openssh-server \
 ##setup non root user
     && useradd -m -s /bin/bash ${user} \
     && mkdir -p /home/${user}/www \
@@ -41,12 +38,9 @@ RUN apt-get update \
 ##install supervisor and setup supervisord.conf file
     && apt-get install -y supervisor \
     && mkdir -p /var/log/supervisor
-
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY update.sh /etc/update.sh
-RUN chmod a+x /etc/update.sh 
+COPY credentials.sh /etc/credentials.sh
+RUN chmod a+x /etc/credentials.sh
 WORKDIR /home/${user}/www/hotelcommerce
-
 EXPOSE 3306 80 443
-
-CMD ["/usr/bin/supervisord"] 
+CMD ["/usr/bin/supervisord"]
