@@ -40,7 +40,7 @@ RUN apt-get update \
     && mkdir -p /var/log/supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY  	credentials.sh /etc/credentials.sh
-RUN chmod a+x /etc/update.sh
+RUN chmod a+x /etc/credentials.sh
 WORKDIR /home/${user}/www/hotelcommerce
 EXPOSE 3306 80 443
 CMD ["/usr/bin/supervisord"]
