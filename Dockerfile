@@ -43,4 +43,4 @@ COPY update.sh /etc/update.sh
 RUN chmod a+x /etc/update.sh 
 WORKDIR /home/${user}/www/hotelcommerce
 EXPOSE 3306 80 443
-CMD ["/usr/bin/supervisord"] 
+CMD ["/usr/bin/supervisord"]
