@@ -1,8 +1,8 @@
-FROM ubuntu:18.04
-LABEL maintainer="Qloapps Support <support@qloapps.com>"
-ARG user=qloapps
+FROM ubuntu:18.04 
+LABEL maintainer="Qloapps Support <support@qloapps.com>" 
+ARG user=qloapps 
 ##Php file configuration with php version and mysql version
-ENV mysql_version=5.7 php_version=7.2 file_uploads=On allow_url_fopen=On memory_limit=512M max_execution_time=240 upload_max_filesize=200M post_max_size=400M max_input_vars=1500
+ENV mysql_version=5.7 php_version=7.2 file_uploads=On allow_url_fopen=On memory_limit=512M max_execution_time=240 upload_max_filesize=200M post_max_size=400M max_input_vars=1500 
 ##Update server and install lamp server
 RUN apt-get update \
     && export DEBIAN_FRONTEND=noninteractive \
@@ -37,10 +37,10 @@ RUN apt-get update \
     && sed -i "s@/var/www/html@/home/${user}/www/hotelcommerce@g" /etc/apache2/sites-enabled/000-default.conf \
 ##install supervisor and setup supervisord.conf file
     && apt-get install -y supervisor \
-    && mkdir -p /var/log/supervisor
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY update.sh /etc/update.sh
-RUN chmod a+x /etc/update.sh
-WORKDIR /home/${user}/www/hotelcommerce
-EXPOSE 3306 80 443
-CMD ["/usr/bin/supervisord"]
+    && mkdir -p /var/log/supervisor 
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf 
+COPY update.sh /etc/update.sh 
+RUN chmod a+x /etc/update.sh 
+WORKDIR /home/${user}/www/hotelcommerce 
+EXPOSE 3306 80 443 
+CMD ["/usr/bin/supervisord"] 
