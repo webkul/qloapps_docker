@@ -23,7 +23,7 @@ RUN apt-get update \
     && useradd -m -s /bin/bash ${user} \
     && mkdir -p /home/${user}/www \
 ##Download Qloapps latest version
-    && cd /home/${user}/www && git clone https://github.com/webkul/hotelcommerce.git \
+    && cd /home/${user}/www && git clone https://github.com/webkul/hotelcommerce \
 ##change file permission and ownership
     && find /home/${user}/www -type f -exec chmod 644 {} \; \
     && find /home/${user}/www -type d -exec chmod 755 {} \; \
